@@ -34,7 +34,7 @@ export default function MindMapForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, layout, nodes, edges })
       });
-      setSvgUrl(`https://mindmapmaker-ld69.onrender.com/map`); // prevent caching
+      setSvgUrl(`https://mindmapmaker-ld69.onrender.com/map?${Date.now()}`); // prevent caching
     }else{
       alert("Please input a valid Map")
     }

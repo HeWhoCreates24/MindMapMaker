@@ -7,18 +7,14 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# CORS config for React dev server
-origins = ["http://localhost:5173", "http://127.0.0.1:5173"]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],      # Allow POST, GET, OPTIONS
+    allow_methods=["*"],
     allow_headers=["*"]
 )
 
-# Data models
 class Node(BaseModel):
     id: str
     label: str
@@ -36,7 +32,6 @@ class MindmapData(BaseModel):
     nodes: list[Node]
     edges: list[Edge]
 
-# Generate mindmap
 @app.post("/generate")
 def generate(data: MindmapData):
     output_dir = "output"
@@ -71,7 +66,6 @@ def generate(data: MindmapData):
     dot.render(output_path, cleanup=True)
     return {"message": "Mindmap generated successfully!"}
 
-# Serve generated map
 @app.get("/map")
 def get_map():
     file_path = "output/map.svg"

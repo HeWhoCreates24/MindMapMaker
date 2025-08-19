@@ -32,6 +32,10 @@ class MindmapData(BaseModel):
     nodes: list[Node]
     edges: list[Edge]
 
+@app.get("/")
+def root():
+    return {"message": "Backend is running 🚀"}
+
 @app.post("/generate")
 def generate(data: MindmapData):
     output_dir = "output"

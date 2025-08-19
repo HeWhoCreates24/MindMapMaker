@@ -29,12 +29,12 @@ export default function MindMapForm() {
 
   const generateMap = async () => {
     if(isValidMap()){
-      await fetch("https://mindmapmaker-c0zq.onrender.com/generate", {
+      await fetch("https://mindmapmaker-ld69.onrender.com/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, layout, nodes, edges })
       });
-      setSvgUrl(`https://mindmapmaker-c0zq.onrender.com/map?${Date.now()}`); // prevent caching
+      setSvgUrl(`https://mindmapmaker-ld69.onrender.com/map?${Date.now()}`); // prevent caching
     }else{
       alert("Please input a valid Map")
     }

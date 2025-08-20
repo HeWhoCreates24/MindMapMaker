@@ -5,8 +5,7 @@ export default function MindMapForm() {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const bootBackend = async () => {
-    const res = await fetch("https://mindmapmaker-ld69.onrender.com/");
-    console.log(res)
+    const res = await fetch(backendUrl);
   }
 
   useEffect(() => {

@@ -1,14 +1,30 @@
 import { useEffect, useState } from "react";
 
 export default function MindMapForm() {
+
+  const bootBackend = async () => {
+    const res = await fetch("https://mindmapmaker-ld69.onrender.com/");
+    console.log(res)
+  }
+
+  useEffect(() => {
+    bootBackend()
+  }, [])
+
   const [title, setTitle] = useState("");
   const [layout, setLayout] = useState("dot");
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
   const [svgUrl, setSvgUrl] = useState("");
 
-  const addNode = () => setNodes([...nodes, { id: "", label: "", type: "text" }]);
-  const addEdge = () => setEdges([...edges, { from_node: "", to_node: "", label: "", dashed: false, id: crypto.randomUUID() }]);
+  const addNode = async (evt) => {
+    await setNodes([...nodes, { id: "", label: "", type: "text" }])
+    evt.target.previousElementSibling.firstChild.focus()
+  };
+  const addEdge = async (evt) => {
+    await setEdges([...edges, { from_node: "", to_node: "", label: "", dashed: false, id: crypto.randomUUID() }])
+    evt.target.previousElementSibling.firstChild.focus()
+  };
 
   const handleNodeChange = (i, field, value) => {
     const newNodes = [...nodes];
@@ -21,6 +37,23 @@ export default function MindMapForm() {
     newEdges[i][field] = value;
     setEdges(newEdges);
   };
+
+  const handleKeyPress = (evt) => {
+    if(evt.key == "Enter"){
+      if(evt.target.id === "title"){
+        console.log(evt)
+        evt.target.parentElement.nextElementSibling.lastChild.focus()
+      }
+      else if(evt.target.id === "layout"){
+        evt.target.blur()
+      }
+      else if(evt.target.classList.contains("last-input")){
+        evt.target.parentElement.nextElementSibling.focus()
+      }else{
+        evt.target.nextElementSibling.focus()
+      }
+    }
+  }
 
   const generateMap = async () => {
     await fetch("https://mindmapmaker-ld69.onrender.com/generate", {
@@ -44,12 +77,12 @@ export default function MindMapForm() {
         <div className="input-group-container">
           <div className="input-group">
             <h3>Map Title</h3>
-            <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Map Title" />
+            <input value={title} onKeyDown={handleKeyPress} onChange={e => setTitle(e.target.value)} id="title" placeholder="Map Title" />
           </div>
 
           <div className="input-group">
             <h3>Map Layout</h3>
-            <select value={layout} onChange={e => setLayout(e.target.value)}>
+            <select value={layout} onKeyDown={handleKeyPress} onChange={e => setLayout(e.target.value)} id="layout" >
               <option value="dot">Dot</option>
               <option value="neato">Neato</option>
               <option value="fdp">Fdp</option>
@@ -68,9 +101,9 @@ export default function MindMapForm() {
             <h3>Nodes</h3>
             {nodes.map((node, i) => (
               <div className="input-container" key={i}>
-                <input placeholder="ID" value={node.id} onChange={e => handleNodeChange(i, "id", e.target.value)} />
-                <input placeholder="Label" value={node.label} onChange={e => handleNodeChange(i, "label", e.target.value)} />
-                <select value={node.type} onChange={e => handleNodeChange(i, "type", e.target.value)}>
+                <input placeholder="ID" value={node.id} onKeyDown={handleKeyPress} onChange={e => handleNodeChange(i, "id", e.target.value)} />
+                <input placeholder="Label" value={node.label} onKeyDown={handleKeyPress} onChange={e => handleNodeChange(i, "label", e.target.value)} />
+                <select value={node.type} onKeyDown={handleKeyPress} onChange={e => handleNodeChange(i, "type", e.target.value)} className="last-input" >
                   <option value="h1">H1</option>
                   <option value="h2">H2</option>
                   <option value="h3">H3</option>
@@ -87,9 +120,9 @@ export default function MindMapForm() {
             <h3>Edges</h3>
             {edges.map((edge, i) => (
               <div className="input-container" key={i}>
-                <input placeholder="From" value={edge.from_node} onChange={e => handleEdgeChange(i, "from_node", e.target.value)} />
-                <input placeholder="To" value={edge.to_node} onChange={e => handleEdgeChange(i, "to_node", e.target.value)} />
-                <input placeholder="Label" value={edge.label} onChange={e => handleEdgeChange(i, "label", e.target.value)} />
+                <input placeholder="From" value={edge.from_node} onKeyDown={handleKeyPress} onChange={e => handleEdgeChange(i, "from_node", e.target.value)} />
+                <input placeholder="To" value={edge.to_node} onKeyDown={handleKeyPress} onChange={e => handleEdgeChange(i, "to_node", e.target.value)} />
+                <input placeholder="Label" value={edge.label} onKeyDown={handleKeyPress} onChange={e => handleEdgeChange(i, "label", e.target.value)} className="last-input" />
                 <label>
                   Dashed
                   <input type="checkbox" checked={edge.dashed} onChange={e => handleEdgeChange(i, "dashed", e.target.checked)} />

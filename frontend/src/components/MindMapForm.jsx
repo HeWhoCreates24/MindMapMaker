@@ -16,20 +16,8 @@ export default function MindMapForm() {
   const [title, setTitle] = useState("");
   const [layout, setLayout] = useState("dot");
   const [theme, setTheme] = useState("classicLight");
-  const [nodes, setNodes] = useState([
-    { id: "1", label: "h1", type: "h1" },
-    { id: "2", label: "h2", type: "h2" },
-    { id: "3", label: "h3", type: "h3" },
-    { id: "4", label: "text", type: "text" },
-    { id: "5", label: "formula", type: "formula" }
-  ]);
-  const [edges, setEdges] = useState([
-    { from_node: "1", to_node: "2", label: "e1", dashed: true, id: crypto.randomUUID() },
-    { from_node: "2", to_node: "3", label: "e2", dashed: false, id: crypto.randomUUID() },
-    { from_node: "3", to_node: "4", label: "e3", dashed: true, id: crypto.randomUUID() },
-    { from_node: "4", to_node: "5", label: "e4", dashed: false, id: crypto.randomUUID() },
-    { from_node: "5", to_node: "1", label: "e5", dashed: true, id: crypto.randomUUID() }
-  ]);
+  const [nodes, setNodes] = useState([]);
+  const [edges, setEdges] = useState([]);
   const [svgUrl, setSvgUrl] = useState("");
 
   const addNode = async (evt) => {

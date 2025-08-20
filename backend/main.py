@@ -4,6 +4,7 @@ from pydantic import BaseModel
 import graphviz
 import os
 from fastapi.middleware.cors import CORSMiddleware
+import utils
 
 app = FastAPI()
 
@@ -29,50 +30,63 @@ class Edge(BaseModel):
 class MindmapData(BaseModel):
     title: str
     layout: str
+    theme: str
     nodes: list[Node]
     edges: list[Edge]
 
 @app.get("/")
 def root():
-    return {"message": "Backend is running 🚀"}
+    return {"message": "Backend is running"}
 
 @app.post("/generate")
 def generate(data: MindmapData):
     output_dir = "output"
     os.makedirs(output_dir, exist_ok=True)
-    output_path = os.path.join(output_dir, "map")
 
-    dot = graphviz.Digraph(comment=data.title, format="svg", engine=data.layout or "dot")
-    dot.attr(label=data.title, overlap="false", fontname="Verdana")
+    dot = graphviz.Digraph(comment=data.title, engine=data.layout or "dot")
+    dot.attr(
+        label=data.title,
+        overlap="false",
+        fontname=utils.font_name(data.theme),
+        nodesep="1",
+        ranksep="1.5",
+        bgcolor=utils.color_5(data.theme),
+        fontcolor=utils.color_1(data.theme)
+    )
 
-    styles = {
-        "h1": {"shape": "box", "style": "filled,rounded", "fillcolor": "lightcoral", "penwidth": "1", "color": "black", "fontsize": "20", "fontname":"Verdana"},
-        "h2": {"shape": "box", "style": "filled,rounded", "fillcolor": "lightpink", "penwidth": "1", "color": "black", "fontsize": "16", "fontname":"Verdana"},
-        "h3": {"shape": "box", "style": "filled,rounded", "fillcolor": "lightblue", "penwidth": "1", "color": "black", "fontsize": "14", "fontname":"Verdana"},
-        "text": {"shape": "box", "penwidth": "1", "color": "black", "fontsize": "12", "fontname":"Verdana"},
-        "formula": {"shape": "box", "style": "filled", "fillcolor": "black", "fontcolor": "white", "fontsize": "14", "fontname":"Verdana"}
-    }
+    styles = utils.theme_style(data.theme)
 
     for node in data.nodes:
-        style = styles.get(node.type, {"shape": "box", "color": "gray", "fontname":"Verdana"})
+        style = styles.get(
+            node.type,
+            {"shape": "box", "color": "gray", "fontname": utils.font_name(data.theme)}
+        )
         dot.node(node.id, node.label, **style)
 
     for edge in data.edges:
-        edge_style = {"style": "dashed"} if edge.dashed else {}
-        if(edge.label):
-            html_label = f'''<
-                <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="lightgray">
-                    <TR><TD>{edge.label or ""}</TD></TR>
-                </TABLE>
-            >'''
-        dot.edge(edge.from_node, edge.to_node, label=html_label if edge.label else "", **edge_style)
+        edge_style = utils.edge_style(data.theme)
+        edge_style["style"] = "dashed" if edge.dashed else "solid"
+        edge_style["label"] = utils.html_label(edge.label, data.theme) if edge.label else ""
+        dot.edge(edge.from_node, edge.to_node, **edge_style)
 
-    dot.render(output_path, cleanup=True)
+    dot.render(filename="map", directory=output_dir, format="dot", cleanup=False)
+    dot.render(filename="map", directory=output_dir, format="svg", cleanup=False)
+
     return {"message": "Mindmap generated successfully!"}
+
 
 @app.get("/map")
 def get_map():
     file_path = "output/map.svg"
     if os.path.exists(file_path):
         return FileResponse(file_path, media_type="image/svg+xml")
+    return {"error": "File not found"}
+
+@app.get("/download")
+def download():
+    src = graphviz.Source.from_file("output/map.dot")
+    src.render("output/map", format="pdf", cleanup=False)
+    file_path = "output/map.pdf"
+    if os.path.exists(file_path):
+        return FileResponse(file_path, media_type="application/pdf")
     return {"error": "File not found"}

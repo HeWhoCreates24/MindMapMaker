@@ -61,11 +61,12 @@ h2, h3{
   flex-wrap: wrap;
 }
 
-button{
+button, a{
   padding: 0.5rem;
   width: 100%;
   color: white;
   background-color: #4a56ff;
+  text-decoration: none;
 }
 
 .del{

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 
 export default function MindMapForm() {
 
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
   const bootBackend = async () => {
     const res = await fetch("https://mindmapmaker-ld69.onrender.com/");
     console.log(res)
@@ -13,8 +15,21 @@ export default function MindMapForm() {
 
   const [title, setTitle] = useState("");
   const [layout, setLayout] = useState("dot");
-  const [nodes, setNodes] = useState([]);
-  const [edges, setEdges] = useState([]);
+  const [theme, setTheme] = useState("classicLight");
+  const [nodes, setNodes] = useState([
+    { id: "1", label: "h1", type: "h1" },
+    { id: "2", label: "h2", type: "h2" },
+    { id: "3", label: "h3", type: "h3" },
+    { id: "4", label: "text", type: "text" },
+    { id: "5", label: "formula", type: "formula" }
+  ]);
+  const [edges, setEdges] = useState([
+    { from_node: "1", to_node: "2", label: "e1", dashed: true, id: crypto.randomUUID() },
+    { from_node: "2", to_node: "3", label: "e2", dashed: false, id: crypto.randomUUID() },
+    { from_node: "3", to_node: "4", label: "e3", dashed: true, id: crypto.randomUUID() },
+    { from_node: "4", to_node: "5", label: "e4", dashed: false, id: crypto.randomUUID() },
+    { from_node: "5", to_node: "1", label: "e5", dashed: true, id: crypto.randomUUID() }
+  ]);
   const [svgUrl, setSvgUrl] = useState("");
 
   const addNode = async (evt) => {
@@ -40,11 +55,11 @@ export default function MindMapForm() {
 
   const handleKeyPress = (evt) => {
     if(evt.key == "Enter"){
-      if(evt.target.id === "title"){
+      if(evt.target.id == "title" || evt.target.id == "layout"){
         console.log(evt)
         evt.target.parentElement.nextElementSibling.lastChild.focus()
       }
-      else if(evt.target.id === "layout"){
+      else if(evt.target.id === "theme"){
         evt.target.blur()
       }
       else if(evt.target.classList.contains("last-input")){
@@ -56,17 +71,17 @@ export default function MindMapForm() {
   }
 
   const generateMap = async () => {
-    await fetch("https://mindmapmaker-ld69.onrender.com/generate", {
+    await fetch(`${backendUrl}generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, layout, nodes, edges })
+      body: JSON.stringify({ title, layout, theme, nodes, edges })
     });
-    setSvgUrl(`https://mindmapmaker-ld69.onrender.com/map?${Date.now()}`); // prevent caching
+    setSvgUrl(`${backendUrl}map?${Date.now()}`); // prevent caching
   };
 
   useEffect(() => {
     generateMap()
-  }, [title, layout, nodes, edges])
+  }, [title, layout, theme, nodes, edges])
 
   return (
     <div id="main-container">
@@ -91,6 +106,14 @@ export default function MindMapForm() {
               <option value="twopi">Twopi</option>
               <option value="patchwork">Patch-Work</option>
               <option value="osage">Osage</option>
+            </select>
+          </div>
+
+          <div className="input-group">
+            <h3>Map Theme</h3>
+            <select value={theme} onKeyDown={handleKeyPress} onChange={e => setTheme(e.target.value)} id="theme" >
+              <option value="classicLight">Classic Light</option>
+              <option value="classicDark">Classic Dark</option>
             </select>
           </div>
         </div>
@@ -139,6 +162,7 @@ export default function MindMapForm() {
       <div id="preview-container" >
         <h2>MindMap Preview</h2>
         <img src={svgUrl} alt="MindMap" />
+        <a href={`${backendUrl}download`}>Save as PDF</a>
       </div>
     </div>
   );

@@ -1,0 +1,33 @@
+digraph {
+	bgcolor=white fontcolor=black fontname=Verdana label="" nodesep=1 overlap=false ranksep=1.5
+	1 [label=h1 color=black fillcolor=lightcoral fontname=Verdana fontsize=20 penwidth=1 shape=box style="filled,rounded"]
+	2 [label=h2 color=black fillcolor=lightpink fontname=Verdana fontsize=16 penwidth=1 shape=box style="filled,rounded"]
+	3 [label=h3 color=black fillcolor=lightblue fontname=Verdana fontsize=14 penwidth=1 shape=box style="filled,rounded"]
+	4 [label=text color=black fontname=Verdana fontsize=12 penwidth=1 shape=box]
+	5 [label=formula fillcolor=black fontcolor=white fontname=Verdana fontsize=14 shape=box style=filled]
+	1 -> 2 [label=<
+                <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="lightgray">
+                    <TR><TD>e1</TD></TR>
+                </TABLE>
+            > color=black style=dashed]
+	2 -> 3 [label=<
+                <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="lightgray">
+                    <TR><TD>e2</TD></TR>
+                </TABLE>
+            > color=black style=solid]
+	3 -> 4 [label=<
+                <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="lightgray">
+                    <TR><TD>e3</TD></TR>
+                </TABLE>
+            > color=black style=dashed]
+	4 -> 5 [label=<
+                <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="lightgray">
+                    <TR><TD>e4</TD></TR>
+                </TABLE>
+            > color=black style=solid]
+	5 -> 1 [label=<
+                <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="lightgray">
+                    <TR><TD>e5</TD></TR>
+                </TABLE>
+            > color=black style=dashed]
+}

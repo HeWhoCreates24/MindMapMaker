@@ -1,0 +1,109 @@
+digraph {
+	graph [bb="0,0,216.75,702",
+		bgcolor=white,
+		fontcolor=black,
+		fontname=Verdana,
+		label="",
+		nodesep=1,
+		overlap=false,
+		ranksep=1.5
+	];
+	node [label="\N"];
+	1	[color=black,
+		fillcolor=lightcoral,
+		fontname=Verdana,
+		fontsize=20,
+		height=0.5,
+		label=h1,
+		penwidth=1,
+		pos="130,684",
+		shape=box,
+		style="filled,rounded",
+		width=0.75];
+	2	[color=black,
+		fillcolor=lightpink,
+		fontname=Verdana,
+		fontsize=16,
+		height=0.5,
+		label=h2,
+		penwidth=1,
+		pos="53,517.5",
+		shape=box,
+		style="filled,rounded",
+		width=0.75];
+	1 -> 2	[color=black,
+		label=<
+                <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="lightgray">
+                    <TR><TD>e1</TD></TR>
+                </TABLE>
+            >,
+		lp="105.49,600.75",
+		pos="e,61.102,535.81 121.91,665.71 108.56,637.2 81.837,580.11 65.875,546.01",
+		style=dashed];
+	3	[color=black,
+		fillcolor=lightblue,
+		fontname=Verdana,
+		fontsize=14,
+		height=0.5,
+		label=h3,
+		penwidth=1,
+		pos="27,351",
+		shape=box,
+		style="filled,rounded",
+		width=0.75];
+	2 -> 3	[color=black,
+		label=<
+                <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="lightgray">
+                    <TR><TD>e2</TD></TR>
+                </TABLE>
+            >,
+		lp="50.932,434.25",
+		pos="e,29.736,369.31 50.267,499.21 45.8,470.95 36.893,414.59 31.488,380.4",
+		style=solid];
+	4	[color=black,
+		fontname=Verdana,
+		fontsize=12,
+		height=0.5,
+		label=text,
+		penwidth=1,
+		pos="53,184.5",
+		shape=box,
+		width=0.75];
+	3 -> 4	[color=black,
+		label=<
+                <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="lightgray">
+                    <TR><TD>e3</TD></TR>
+                </TABLE>
+            >,
+		lp="50.932,267.75",
+		pos="e,50.264,202.81 29.733,332.71 34.2,304.45 43.107,248.09 48.512,213.9",
+		style=dashed];
+	5	[fillcolor=black,
+		fontcolor=white,
+		fontname=Verdana,
+		fontsize=14,
+		height=0.5,
+		label=formula,
+		pos="125,18",
+		shape=box,
+		style=filled,
+		width=0.97222];
+	4 -> 5	[color=black,
+		label=<
+                <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="lightgray">
+                    <TR><TD>e4</TD></TR>
+                </TABLE>
+            >,
+		lp="102.69,101.25",
+		pos="e,117.42,36.309 60.569,166.21 73.047,137.7 98.036,80.606 112.96,46.506",
+		style=solid];
+	5 -> 1	[color=black,
+		label=<
+                <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="lightgray">
+                    <TR><TD>e5</TD></TR>
+                </TABLE>
+            >,
+		lp="207.38,351",
+		pos="e,142.47,665.72 138.39,36.136 159.46,64.88 198,125.38 198,183.5 198,518.5 198,518.5 198,518.5 198,570.37 168.77,624.93 148.64,656.36",
+		style=dashed];
+}
